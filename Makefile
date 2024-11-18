@@ -7,6 +7,7 @@ download_libs:
 publish:
 	git branch -D gh_pages || true
 	git checkout -b gh_pages
+	make download_libs
 	rm .gitignore README.md lib/.gitkeep
 	git add -A
 	git commit -m "Published"
