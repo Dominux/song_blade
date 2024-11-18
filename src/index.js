@@ -1,17 +1,29 @@
 import Cube from './cube.js'
 
-console.log('LMAO')
+console.log('Started')
 
-const main = () => {
+const main = async () => {
   const canvas = document.getElementById('canvas')
 
   const engine = new BABYLON.Engine(canvas, true)
 
+  const scene = await createScene()
+
+  engine.runRenderLoop(() => {
+    scene.render()
+  })
+
+  window.addEventListener('resize', () => {
+    engine.resize()
+  })
+}
+
+const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
 
   const camera = new BABYLON.FreeCamera(
     'camera1',
-    new BABYLON.Vector3(0, 1, -10),
+    new BABYLON.Vector3(0, 2, -10),
     scene
   )
 
@@ -21,7 +33,7 @@ const main = () => {
 
   const light = new BABYLON.HemisphericLight(
     'light',
-    new BABYLON.Vector3(1, 0, -1),
+    new BABYLON.Vector3(1, 4, -1),
     scene
   )
 
@@ -37,13 +49,18 @@ const main = () => {
     }, 1700)
   }, 800)
 
-  engine.runRenderLoop(() => {
-    scene.render()
-  })
+  await addXRSupport(scene)
 
-  window.addEventListener('resize', () => {
-    engine.resize()
+  return scene
+}
+
+const addXRSupport = async (scene) => {
+  const env = scene.createDefaultEnvironment()
+
+  // here we add XR support
+  const xr = await scene.createDefaultXRExperienceAsync({
+    floorMeshes: [env.ground],
   })
 }
 
-main()
+await main()
