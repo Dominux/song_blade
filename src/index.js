@@ -82,14 +82,6 @@ const addXRSupport = async (scene, controllersManager) => {
         const isLeft = motionController.handedness === 'left'
 
         controller.onMeshLoadedObservable.add((mesh) => {
-          const blade = BABYLON.MeshBuilder.CreateCylinder(
-            'cone',
-            { diameter: 0.1 },
-            scene
-          )
-          blade.position = mesh.position
-          blade.rotation = mesh.rotation
-
           if (isLeft) controllersManager.assignLeftController(mesh)
           else controllersManager.assignRightController(mesh)
         })
