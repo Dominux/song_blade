@@ -13,6 +13,8 @@ export default class ControllersManager {
     this.right = mesh
 
     this._createBlade('right', mesh)
+
+    setInterval(() => alert(mesh.getAbsolutePosition()), 5000)
   }
 
   _createBlade(side, mesh) {
