@@ -22,7 +22,9 @@ export default class ControllersManager {
       this.scene
     )
 
-    blade.position = mesh.getAbsolutePosition()
-    blade.rotation = mesh.absoluteRotationQuaternion()
+    blade.parent = mesh
+
+    // blade.position = mesh.getAbsolutePosition()
+    // blade.rotation = mesh.absoluteRotationQuaternion()
   }
 }
