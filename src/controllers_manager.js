@@ -13,20 +13,16 @@ export default class ControllersManager {
     this.right = mesh
 
     this._createBlade('right', mesh)
-
-    setInterval(() => alert(mesh.getAbsolutePosition()), 5000)
   }
 
   _createBlade(side, mesh) {
     const blade = BABYLON.MeshBuilder.CreateCylinder(
       `${side} blade`,
-      { diameter: 0.1 },
+      { height: 1, diameter: 0.05 },
       this.scene
     )
 
+    blade.position.z += 0.3
     blade.parent = mesh
-
-    // blade.position = mesh.getAbsolutePosition()
-    // blade.rotation = mesh.absoluteRotationQuaternion()
   }
 }
