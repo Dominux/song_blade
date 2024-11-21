@@ -1,3 +1,4 @@
+import ControllersManager from './controllers_manager.js'
 import Cube from './cube.js'
 
 console.log('Started')
@@ -23,9 +24,10 @@ const createScene = async (engine) => {
 
   const camera = new BABYLON.FreeCamera(
     'camera1',
-    new BABYLON.Vector3(0, 2, -10),
+    new BABYLON.Vector3(1, 2, -10),
     scene
   )
+  // camera.radius = 200
 
   camera.setTarget(BABYLON.Vector3.Zero())
 
@@ -49,17 +51,50 @@ const createScene = async (engine) => {
     }, 1700)
   }, 800)
 
-  await addXRSupport(scene)
+  const controllersManager = new ControllersManager()
+
+  await addXRSupport(scene, controllersManager)
 
   return scene
 }
 
-const addXRSupport = async (scene) => {
+/**
+ *
+ * @param {BABYLON.Scene} scene
+ * @param {ControllersManager} controllersManager
+ */
+const addXRSupport = async (scene, controllersManager) => {
   const env = scene.createDefaultEnvironment()
 
   // here we add XR support
   const xr = await scene.createDefaultXRExperienceAsync({
     floorMeshes: [env.ground],
+  })
+
+  // assigning controllers
+  xr.input.onControllerAddedObservable.add((controller) => {
+    controller.onMotionControllerInitObservable.add((motionController) => {
+      // hands are controllers to; do not want to go do this code; when it is a hand
+      const isHand = controller.inputSource.hand
+      if (isHand) return
+
+      controller.onMotionControllerInitObservable.add((motionController) => {
+        const isLeft = motionController.handedness === 'left'
+
+        controller.onMeshLoadedObservable.add((mesh) => {
+          const blade = BABYLON.MeshBuilder.CreateCylinder(
+            'cone',
+            { diameter: 0.1 },
+            scene
+          )
+          blade.position = mesh.position
+          blade.rotation = mesh.rotation
+
+          if (isLeft) controllersManager.assignLeftController(mesh)
+          else controllersManager.assignRightController(mesh)
+        })
+      })
+    })
   })
 }
 

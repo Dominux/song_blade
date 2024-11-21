@@ -10,11 +10,11 @@ const createCubeAnimation = () => {
   const keys = [
     {
       frame: 0,
-      value: new BABYLON.Vector3(2, 1, 90),
+      value: new BABYLON.Vector3(2, 0, 50),
     },
     {
       frame: 50,
-      value: new BABYLON.Vector3(2, 1, -10),
+      value: new BABYLON.Vector3(2, 0, 10),
     },
   ]
 
@@ -29,7 +29,7 @@ export default class Cube {
   constructor(scene) {
     this._scene = scene
 
-    this._cube = BABYLON.MeshBuilder.CreateBox('cube', { side: 6 }, this._scene)
+    this._cube = BABYLON.MeshBuilder.CreateBox('cube', { size: 1 }, this._scene)
 
     const cubeMaterial = new BABYLON.StandardMaterial(
       'Cube Material',
