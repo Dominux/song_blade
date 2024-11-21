@@ -23,7 +23,7 @@ export default class ControllersManager {
     )
 
     blade.position.z += 0.3
-    blade.rotation.x = Math.PI / 2
+    blade.rotation.x = -Math.PI / 2
 
     blade.parent = mesh
   }
