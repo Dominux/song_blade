@@ -14,7 +14,7 @@ const createCubeAnimation = () => {
     },
     {
       frame: 50,
-      value: new BABYLON.Vector3(2, 0, 10),
+      value: new BABYLON.Vector3(2, 0, 0),
     },
   ]
 
@@ -30,6 +30,17 @@ export default class Cube {
     this._scene = scene
 
     this._cube = BABYLON.MeshBuilder.CreateBox('cube', { size: 1 }, this._scene)
+
+    // Setting only the basic mass properties
+    this._body = new BABYLON.PhysicsBody(
+      this._cube,
+      BABYLON.PhysicsMotionType.DYNAMIC,
+      false,
+      scene
+    )
+    this._body.setMassProperties({
+      mass: 1,
+    })
 
     const cubeMaterial = new BABYLON.StandardMaterial(
       'Cube Material',
@@ -51,5 +62,6 @@ export default class Cube {
 
   delete() {
     this._cube.dispose()
+    this._body.dispose()
   }
 }
