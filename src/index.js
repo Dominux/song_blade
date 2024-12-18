@@ -47,17 +47,14 @@ const createScene = async (engine) => {
 
   setInterval(() => {
     const cube = new Cube(scene)
-    cube.startAnimation()
+    cube.startMovingTowardsPlayer()
 
-    setTimeout(() => {
-      cube.stopAnimation()
-      cube.delete()
-    }, 1700)
+    setTimeout(() => cube.delete(), 1900)
   }, 800)
 
   const controllersManager = new ControllersManager()
 
-  await addXRSupport(scene, controllersManager)
+  // await addXRSupport(scene, controllersManager)
 
   return scene
 }

@@ -1,30 +1,3 @@
-const createCubeAnimation = () => {
-  const animationBox = new BABYLON.Animation(
-    'moveForward',
-    'position',
-    30,
-    BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-    BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-  )
-  // Animation keys
-  const keys = [
-    {
-      frame: 0,
-      value: new BABYLON.Vector3(2, 0, 50),
-    },
-    {
-      frame: 50,
-      value: new BABYLON.Vector3(2, 0, 0),
-    },
-  ]
-
-  animationBox.setKeys(keys)
-
-  return animationBox
-}
-
-const animationBox = createCubeAnimation()
-
 export default class Cube {
   constructor(scene) {
     this._scene = scene
@@ -50,14 +23,11 @@ export default class Cube {
     this._cube.material = cubeMaterial
   }
 
-  startAnimation() {
-    this._cube.animations.push(animationBox)
-
-    this._animation = this._scene.beginAnimation(this._cube, 0, 100, true)
-  }
-
-  stopAnimation() {
-    this._animation.pause()
+  startMovingTowardsPlayer() {
+    this._body.applyForce(
+      new BABYLON.Vector3(0, 0, -300),
+      BABYLON.Vector3.Zero()
+    )
   }
 
   delete() {
