@@ -2,7 +2,11 @@ export default class Cube {
   constructor(scene) {
     this._scene = scene
 
-    this._cube = BABYLON.MeshBuilder.CreateBox('cube', { size: 1 }, this._scene)
+    this._cube = BABYLON.MeshBuilder.CreateBox(
+      'cube',
+      { size: 0.4 },
+      this._scene
+    )
 
     // Setting only the basic mass properties
     this._body = new BABYLON.PhysicsBody(

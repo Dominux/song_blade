@@ -1,16 +1,16 @@
 export default class ControllersManager {
   constructor(scene) {
-    this.scene = scene
+    this._scene = scene
   }
 
   assignLeftController(mesh) {
-    this.left = mesh
+    this._left = mesh
 
     this._createBlade('left', mesh)
   }
 
   assignRightController(mesh) {
-    this.right = mesh
+    this._right = mesh
 
     this._createBlade('right', mesh)
   }
@@ -19,7 +19,7 @@ export default class ControllersManager {
     const blade = BABYLON.MeshBuilder.CreateCylinder(
       `${side} blade`,
       { height: 1, diameter: 0.05 },
-      this.scene
+      this._scene
     )
 
     blade.position.z += 0.3

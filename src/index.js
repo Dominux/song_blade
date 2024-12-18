@@ -45,12 +45,59 @@ const createScene = async (engine) => {
 
   light.intensity = 0.7
 
+  {
+    const blade = BABYLON.MeshBuilder.CreateCylinder(
+      `blade`,
+      { height: 1, diameter: 0.05 },
+      scene
+    )
+
+    blade.position.z -= 6
+    blade.position.x -= 0.7
+
+    const bladeBody = new BABYLON.PhysicsBody(
+      blade,
+      BABYLON.PhysicsMotionType.DYNAMIC,
+      false,
+      scene
+    )
+    bladeBody.setMassProperties({
+      mass: 1,
+    })
+
+    let direction = 'right'
+
+    scene.onPointerDown = () => {
+      let x
+
+      if (direction === 'right') {
+        x = 10
+        direction = 'left'
+      } else {
+        x = -10
+        direction = 'right'
+      }
+
+      bladeBody.applyImpulse(
+        new BABYLON.Vector3(x, 0, 0),
+        BABYLON.Vector3.Zero()
+      )
+
+      setTimeout(() => {
+        bladeBody.applyImpulse(
+          new BABYLON.Vector3(-x, 0, 0),
+          BABYLON.Vector3.Zero()
+        )
+      }, 150)
+    }
+  }
+
   setInterval(() => {
     const cube = new Cube(scene)
     cube.startMovingTowardsPlayer()
 
     setTimeout(() => cube.delete(), 1900)
-  }, 800)
+  }, 500)
 
   const controllersManager = new ControllersManager()
 
