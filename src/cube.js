@@ -14,7 +14,7 @@ const createCubeAnimation = () => {
     },
     {
       frame: 50,
-      value: new BABYLON.Vector3(2, 0, 10),
+      value: new BABYLON.Vector3(2, 0, 0),
     },
   ]
 
