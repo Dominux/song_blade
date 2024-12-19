@@ -54,15 +54,17 @@ const createScene = async (engine) => {
     )
 
     blade.position.z -= 6
-    blade.position.x -= 0.7
+    blade.position.x -= 0
 
     // physics aggregate
     const bladeAggregate = new BABYLON.PhysicsAggregate(
       blade,
       BABYLON.PhysicsShapeType.CYLINDER,
-      { mass: 1 },
+      { mass: 0, friction: -1 },
       scene
     )
+
+    console.log(bladeAggregate)
 
     // const bladeBody = new BABYLON.PhysicsBody(
     //   blade,
@@ -74,32 +76,6 @@ const createScene = async (engine) => {
     //   mass: 1,
     // })
     bladeAggregate.body.setCollisionCallbackEnabled(true)
-
-    let direction = 'right'
-
-    scene.onPointerDown = () => {
-      let x
-
-      if (direction === 'right') {
-        x = 10
-        direction = 'left'
-      } else {
-        x = -10
-        direction = 'right'
-      }
-
-      bladeAggregate.body.applyImpulse(
-        new BABYLON.Vector3(x, 0, 0),
-        BABYLON.Vector3.Zero()
-      )
-
-      setTimeout(() => {
-        bladeAggregate.body.applyImpulse(
-          new BABYLON.Vector3(-x, 0, 0),
-          BABYLON.Vector3.Zero()
-        )
-      }, 150)
-    }
   }
 
   setInterval(() => {
@@ -111,7 +87,7 @@ const createScene = async (engine) => {
 
   const controllersManager = new ControllersManager()
 
-  runCollisionObservable(physicsEngine)
+  // runCollisionObservable(physicsEngine)
   // await addXRSupport(scene, controllersManager)
 
   return scene
