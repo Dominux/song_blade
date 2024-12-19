@@ -1,7 +1,7 @@
 globalThis.HK = await HavokPhysics()
 
 import ControllersManager from './controllers_manager.js'
-import Cube from './cube.js'
+import GameManager from './game_manager.js'
 
 console.log('Started')
 
@@ -12,7 +12,15 @@ const main = async () => {
 
   const scene = await createScene()
 
+  const gameManager = new GameManager(scene)
+
+  setInterval(() => gameManager.createCube(), 200)
+
+  lmao(scene)
+
   engine.runRenderLoop(() => {
+    gameManager.onGameTick()
+
     scene.render()
   })
 
@@ -28,7 +36,7 @@ const createScene = async (engine) => {
 
   const camera = new BABYLON.FreeCamera(
     'camera1',
-    new BABYLON.Vector3(1, 2, -10),
+    new BABYLON.Vector3(0, 2, -10),
     scene
   )
   // camera.radius = 200
@@ -45,21 +53,60 @@ const createScene = async (engine) => {
 
   light.intensity = 0.7
 
-  setInterval(() => {
-    const cube = new Cube(scene)
-    cube.startAnimation()
-
-    setTimeout(() => {
-      cube.stopAnimation()
-      cube.delete()
-    }, 1700)
-  }, 800)
-
   const controllersManager = new ControllersManager()
 
-  await addXRSupport(scene, controllersManager)
+  // await addXRSupport(scene, controllersManager)
 
   return scene
+}
+
+const createBladeAnimation = (isDirectionRight) => {
+  const animationBox = new BABYLON.Animation(
+    'moveForward',
+    'position',
+    30,
+    BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+    BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+  )
+  // Animation keys
+  const keys = [
+    {
+      frame: 0,
+      value: new BABYLON.Vector3(-1, 1, -7),
+    },
+    {
+      frame: 10,
+      value: new BABYLON.Vector3(1, 1, -7),
+    },
+  ]
+
+  if (isDirectionRight) {
+    const tempVal = keys[1].value
+    keys[1].value = keys[0].value
+    keys[0].value = tempVal
+  }
+
+  animationBox.setKeys(keys)
+
+  return animationBox
+}
+
+const lmao = (scene) => {
+  const blade = BABYLON.MeshBuilder.CreateCylinder(
+    `blade`,
+    { height: 1, diameter: 0.05 },
+    scene
+  )
+
+  let isDirectionRight = true
+
+  scene.onPointerDown = () => {
+    const animationBox = createBladeAnimation(isDirectionRight)
+    blade.animations.push(animationBox)
+    scene.beginAnimation(blade, 0, 10, true)
+
+    isDirectionRight = !isDirectionRight
+  }
 }
 
 /**

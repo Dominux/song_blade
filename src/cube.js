@@ -10,11 +10,11 @@ const createCubeAnimation = () => {
   const keys = [
     {
       frame: 0,
-      value: new BABYLON.Vector3(2, 0, 50),
+      value: new BABYLON.Vector3(0, 0, 50),
     },
     {
-      frame: 50,
-      value: new BABYLON.Vector3(2, 0, 0),
+      frame: 140,
+      value: new BABYLON.Vector3(0, 0, -20),
     },
   ]
 
@@ -29,7 +29,11 @@ export default class Cube {
   constructor(scene) {
     this._scene = scene
 
-    this._cube = BABYLON.MeshBuilder.CreateBox('cube', { size: 1 }, this._scene)
+    this._cube = BABYLON.MeshBuilder.CreateBox(
+      'cube',
+      { size: 0.4 },
+      this._scene
+    )
 
     const cubeMaterial = new BABYLON.StandardMaterial(
       'Cube Material',
@@ -37,12 +41,14 @@ export default class Cube {
     )
     cubeMaterial.diffuseColor = BABYLON.Color3.Red()
     this._cube.material = cubeMaterial
+
+    this.state = 'alive'
   }
 
   startAnimation() {
     this._cube.animations.push(animationBox)
 
-    this._animation = this._scene.beginAnimation(this._cube, 0, 100, true)
+    this._animation = this._scene.beginAnimation(this._cube, 0, 140, true)
   }
 
   stopAnimation() {
