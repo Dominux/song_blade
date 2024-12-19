@@ -24,7 +24,8 @@ const main = async () => {
 const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
 
-  scene.enablePhysics(BABYLON.Vector3.Zero(), new BABYLON.HavokPlugin())
+  const physicsEngine = new BABYLON.HavokPlugin()
+  scene.enablePhysics(BABYLON.Vector3.Zero(), physicsEngine)
 
   const camera = new BABYLON.FreeCamera(
     'camera1',
@@ -55,15 +56,24 @@ const createScene = async (engine) => {
     blade.position.z -= 6
     blade.position.x -= 0.7
 
-    const bladeBody = new BABYLON.PhysicsBody(
+    // physics aggregate
+    const bladeAggregate = new BABYLON.PhysicsAggregate(
       blade,
-      BABYLON.PhysicsMotionType.DYNAMIC,
-      false,
+      BABYLON.PhysicsShapeType.CYLINDER,
+      { mass: 1 },
       scene
     )
-    bladeBody.setMassProperties({
-      mass: 1,
-    })
+
+    // const bladeBody = new BABYLON.PhysicsBody(
+    //   blade,
+    //   BABYLON.PhysicsMotionType.DYNAMIC,
+    //   false,
+    //   scene
+    // )
+    // bladeBody.setMassProperties({
+    //   mass: 1,
+    // })
+    bladeAggregate.body.setCollisionCallbackEnabled(true)
 
     let direction = 'right'
 
@@ -78,13 +88,13 @@ const createScene = async (engine) => {
         direction = 'right'
       }
 
-      bladeBody.applyImpulse(
+      bladeAggregate.body.applyImpulse(
         new BABYLON.Vector3(x, 0, 0),
         BABYLON.Vector3.Zero()
       )
 
       setTimeout(() => {
-        bladeBody.applyImpulse(
+        bladeAggregate.body.applyImpulse(
           new BABYLON.Vector3(-x, 0, 0),
           BABYLON.Vector3.Zero()
         )
@@ -97,13 +107,24 @@ const createScene = async (engine) => {
     cube.startMovingTowardsPlayer()
 
     setTimeout(() => cube.delete(), 1900)
-  }, 500)
+  }, 300)
 
   const controllersManager = new ControllersManager()
 
+  runCollisionObservable(physicsEngine)
   // await addXRSupport(scene, controllersManager)
 
   return scene
+}
+
+/**
+ *
+ * @param {BABYLON.HavokPlugin} physicsEngine
+ */
+const runCollisionObservable = (physicsEngine) => {
+  physicsEngine.onCollisionObservable.add((e) => {
+    console.log(e.type)
+  })
 }
 
 /**
