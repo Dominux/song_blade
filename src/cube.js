@@ -12,11 +12,11 @@ const createCubeAnimation = () => {
   const keys = [
     {
       frame: 0,
-      value: new BABYLON.Vector3(0, 0, 30),
+      value: new BABYLON.Vector3(0, 2, 30),
     },
     {
       frame: 140,
-      value: new BABYLON.Vector3(0, 0, -20),
+      value: new BABYLON.Vector3(0, 2, -20),
     },
   ]
 

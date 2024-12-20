@@ -21,7 +21,7 @@ export default class ControllersManager {
     const blade = new Blade(this.scene, side)
 
     blade.mesh.position.z += 0.3
-    blade.mesh.rotation.x = -Math.PI / 2
+    blade.mesh.rotation.x = Math.PI / 2
 
     blade.mesh.parent = mesh
 
