@@ -1,3 +1,5 @@
+import Blade from './blade.js'
+
 const createCubeAnimation = () => {
   const animationBox = new BABYLON.Animation(
     'moveForward',
@@ -34,6 +36,7 @@ export default class Cube {
       { size: 0.4 },
       this._scene
     )
+    this._cube.position.z = 50
 
     const cubeMaterial = new BABYLON.StandardMaterial(
       'Cube Material',
@@ -41,8 +44,6 @@ export default class Cube {
     )
     cubeMaterial.diffuseColor = BABYLON.Color3.Red()
     this._cube.material = cubeMaterial
-
-    this.state = 'alive'
   }
 
   startAnimation() {
@@ -51,11 +52,27 @@ export default class Cube {
     this._animation = this._scene.beginAnimation(this._cube, 0, 140, true)
   }
 
+  /**
+   *
+   * @param {Blade} blade
+   */
+  doesIntersect(blade) {
+    return this._cube.intersectsMesh(blade.mesh, false)
+  }
+
+  touch(blade) {
+    this._touchedBlade = blade
+  }
+
+  get touchedBlade() {
+    return this._touchedBlade
+  }
+
   stopAnimation() {
     this._animation.pause()
   }
 
   delete() {
-    this._cube.dispose()
+    if (!this._cube.isDisposed()) this._cube.dispose()
   }
 }

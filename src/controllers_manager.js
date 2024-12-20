@@ -1,3 +1,5 @@
+import Blade from './blade'
+
 export default class ControllersManager {
   constructor(scene) {
     this.scene = scene
@@ -16,15 +18,13 @@ export default class ControllersManager {
   }
 
   _createBlade(side, mesh) {
-    const blade = BABYLON.MeshBuilder.CreateCylinder(
-      `${side} blade`,
-      { height: 1, diameter: 0.05 },
-      this.scene
-    )
+    const blade = new Blade(this.scene, side)
 
-    blade.position.z += 0.3
-    blade.rotation.x = -Math.PI / 2
+    blade.mesh.position.z += 0.3
+    blade.mesh.rotation.x = -Math.PI / 2
 
-    blade.parent = mesh
+    blade.mesh.parent = mesh
+
+    return blade
   }
 }

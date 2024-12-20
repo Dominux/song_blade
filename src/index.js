@@ -1,5 +1,6 @@
 globalThis.HK = await HavokPhysics()
 
+import Blade from './blade.js'
 import ControllersManager from './controllers_manager.js'
 import GameManager from './game_manager.js'
 
@@ -12,15 +13,7 @@ const main = async () => {
 
   const scene = await createScene()
 
-  const gameManager = new GameManager(scene)
-
-  setInterval(() => gameManager.createCube(), 200)
-
-  lmao(scene)
-
   engine.runRenderLoop(() => {
-    gameManager.onGameTick()
-
     scene.render()
   })
 
@@ -53,68 +46,29 @@ const createScene = async (engine) => {
 
   light.intensity = 0.7
 
+  const blade = new Blade(scene)
+
+  const gameManager = new GameManager(scene, blade)
+
+  setInterval(() => gameManager.spawnCube(), 200)
+  // gameManager.spawnCube()
+
+  scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
+
   const controllersManager = new ControllersManager()
 
-  // await addXRSupport(scene, controllersManager)
+  await addXRSupport(scene, controllersManager)
 
   return scene
-}
-
-const createBladeAnimation = (isDirectionRight) => {
-  const animationBox = new BABYLON.Animation(
-    'moveForward',
-    'position',
-    30,
-    BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-    BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-  )
-  // Animation keys
-  const keys = [
-    {
-      frame: 0,
-      value: new BABYLON.Vector3(-1, 1, -7),
-    },
-    {
-      frame: 10,
-      value: new BABYLON.Vector3(1, 1, -7),
-    },
-  ]
-
-  if (isDirectionRight) {
-    const tempVal = keys[1].value
-    keys[1].value = keys[0].value
-    keys[0].value = tempVal
-  }
-
-  animationBox.setKeys(keys)
-
-  return animationBox
-}
-
-const lmao = (scene) => {
-  const blade = BABYLON.MeshBuilder.CreateCylinder(
-    `blade`,
-    { height: 1, diameter: 0.05 },
-    scene
-  )
-
-  let isDirectionRight = true
-
-  scene.onPointerDown = () => {
-    const animationBox = createBladeAnimation(isDirectionRight)
-    blade.animations.push(animationBox)
-    scene.beginAnimation(blade, 0, 10, true)
-
-    isDirectionRight = !isDirectionRight
-  }
 }
 
 /**
  *
  * @param {BABYLON.Scene} scene
  * @param {ControllersManager} controllersManager
+ * @param {GameManager} gameManager
  */
-const addXRSupport = async (scene, controllersManager) => {
+const addXRSupport = async (scene, controllersManager, gameManager) => {
   const env = scene.createDefaultEnvironment()
 
   // here we add XR support
@@ -133,8 +87,13 @@ const addXRSupport = async (scene, controllersManager) => {
         const isLeft = motionController.handedness === 'left'
 
         controller.onMeshLoadedObservable.add((mesh) => {
+          let blade
           if (isLeft) controllersManager.assignLeftController(mesh)
-          else controllersManager.assignRightController(mesh)
+          else {
+            blade = controllersManager.assignRightController(mesh)
+          }
+
+          gameManager._blade = blade
         })
       })
     })
