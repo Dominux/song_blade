@@ -1,4 +1,4 @@
-import Blade from './blade'
+import Blade from './blade.js'
 
 export default class ControllersManager {
   constructor(scene) {
