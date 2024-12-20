@@ -46,15 +46,6 @@ const createScene = async (engine) => {
 
   light.intensity = 0.7
 
-  const blade = new Blade(scene)
-
-  const gameManager = new GameManager(scene, blade)
-
-  setInterval(() => gameManager.spawnCube(), 200)
-  // gameManager.spawnCube()
-
-  scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
-
   const controllersManager = new ControllersManager()
 
   await addXRSupport(scene, controllersManager)
@@ -66,9 +57,8 @@ const createScene = async (engine) => {
  *
  * @param {BABYLON.Scene} scene
  * @param {ControllersManager} controllersManager
- * @param {GameManager} gameManager
  */
-const addXRSupport = async (scene, controllersManager, gameManager) => {
+const addXRSupport = async (scene, controllersManager) => {
   const env = scene.createDefaultEnvironment()
 
   // here we add XR support
@@ -91,9 +81,14 @@ const addXRSupport = async (scene, controllersManager, gameManager) => {
           if (isLeft) controllersManager.assignLeftController(mesh)
           else {
             blade = controllersManager.assignRightController(mesh)
-          }
 
-          gameManager._blade = blade
+            const gameManager = new GameManager(scene, controllersManager.blade)
+
+            setInterval(() => gameManager.spawnCube(), 200)
+            // gameManager.spawnCube()
+
+            scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
+          }
         })
       })
     })

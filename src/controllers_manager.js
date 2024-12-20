@@ -25,6 +25,6 @@ export default class ControllersManager {
 
     blade.mesh.parent = mesh
 
-    return blade
+    this.blade = blade
   }
 }

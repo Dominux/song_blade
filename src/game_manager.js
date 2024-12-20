@@ -37,18 +37,18 @@ export default class GameManager {
     // })
 
     // checking if alive cubes are touched
-    this._aliveCubes = this._aliveCubes.filter((cube) => {
-      // console.log(cube._cube.position.z, this._blade.mesh.position.z)
-      if (!cube.doesIntersect(this._blade)) {
-        cube.touch(this._blade)
-        cube.stopAnimation()
-        cube.delete()
-        // this._touchedCubes.push(cube)
-        return false
-      } else {
-        return true
-      }
-    })
+    // this._aliveCubes = this._aliveCubes.filter((cube) => {
+    //   // console.log(cube._cube.position.z, this._blade.mesh.position.z)
+    //   if (!cube.doesIntersect(this._blade)) {
+    //     cube.touch(this._blade)
+    //     cube.stopAnimation()
+    //     cube.delete()
+    //     // this._touchedCubes.push(cube)
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // })
 
     // adding cubes to alive ones
     for (const cube of this._cubesToMakeAlive) {
