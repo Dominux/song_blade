@@ -36,7 +36,7 @@ export default class GameManager {
     //   }
     // })
 
-    checking if alive cubes are touched
+    // checking if alive cubes are touched
     this._aliveCubes = this._aliveCubes.filter((cube) => {
       // console.log(cube._cube.position.z, this._blade.mesh.position.z)
       if (!cube.doesIntersect(this._blade)) {
