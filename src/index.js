@@ -84,8 +84,7 @@ const addXRSupport = async (scene, controllersManager) => {
 
             const gameManager = new GameManager(scene, controllersManager.blade)
 
-            setInterval(() => gameManager.spawnCube(), 200)
-            // gameManager.spawnCube()
+            setInterval(() => gameManager.spawnCube(), 400)
 
             scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
           }

@@ -12,11 +12,11 @@ const createCubeAnimation = () => {
   const keys = [
     {
       frame: 0,
-      value: new BABYLON.Vector3(0, 1, 50),
+      value: new BABYLON.Vector3(0, 1, 30),
     },
     {
-      frame: 140,
-      value: new BABYLON.Vector3(0, 1, -20),
+      frame: 200,
+      value: new BABYLON.Vector3(0, 1, -30),
     },
   ]
 
@@ -49,7 +49,7 @@ export default class Cube {
   startAnimation() {
     this._cube.animations.push(animationBox)
 
-    this._animation = this._scene.beginAnimation(this._cube, 0, 140, true)
+    this._animation = this._scene.beginAnimation(this._cube, 0, 200, true)
   }
 
   /**
