@@ -12,11 +12,11 @@ const createCubeAnimation = () => {
   const keys = [
     {
       frame: 0,
-      value: new BABYLON.Vector3(0, 2, 30),
+      value: new BABYLON.Vector3(0, 1, 50),
     },
     {
       frame: 140,
-      value: new BABYLON.Vector3(0, 2, -20),
+      value: new BABYLON.Vector3(0, 1, -20),
     },
   ]
 
@@ -36,7 +36,7 @@ export default class Cube {
       { size: 0.4 },
       this._scene
     )
-    this._cube.position.z = 30
+    // this._cube.position.z = 30
 
     const cubeMaterial = new BABYLON.StandardMaterial(
       'Cube Material',
