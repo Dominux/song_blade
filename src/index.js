@@ -1,6 +1,5 @@
 globalThis.HK = await HavokPhysics()
 
-import Blade from './blade.js'
 import ControllersManager from './controllers_manager.js'
 import GameManager from './game_manager.js'
 

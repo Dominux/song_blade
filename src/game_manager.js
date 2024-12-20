@@ -70,6 +70,6 @@ export default class GameManager {
     setTimeout(() => {
       cube.stopAnimation()
       cube.delete()
-    }, 4000)
+    }, 6000)
   }
 }
