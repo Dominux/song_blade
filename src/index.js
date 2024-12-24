@@ -1,5 +1,6 @@
 globalThis.HK = await HavokPhysics()
 
+import Blade from './blade.js'
 import ControllersManager from './controllers_manager.js'
 import GameManager from './game_manager.js'
 
@@ -9,6 +10,8 @@ const main = async () => {
   const canvas = document.getElementById('canvas')
 
   const engine = new BABYLON.Engine(canvas, true)
+
+  await BABYLON.InitializeCSG2Async()
 
   const scene = await createScene()
 
@@ -45,9 +48,16 @@ const createScene = async (engine) => {
 
   light.intensity = 0.7
 
-  const controllersManager = new ControllersManager()
+  const blade = new Blade(scene, 'asd')
+  blade.mesh.position.y += 1
+  blade.mesh.position.z -= 7
+  const gameManager = new GameManager(scene, blade)
+  setInterval(() => gameManager.spawnCube(), 400)
+  scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
 
-  await addXRSupport(scene, controllersManager)
+  // const controllersManager = new ControllersManager()
+
+  // await addXRSupport(scene, controllersManager)
 
   return scene
 }

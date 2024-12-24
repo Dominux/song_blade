@@ -60,8 +60,33 @@ export default class Cube {
     return this._cube.intersectsMesh(blade.mesh, false)
   }
 
-  touch(blade) {
-    this._touchedBlade = blade
+  /**
+   *
+   * @param {Blade} blade
+   */
+  cut(blade) {
+    const utilCut = BABYLON.MeshBuilder.CreateBox('cube', {
+      updatable: true,
+      height: 10,
+      width: 0.08,
+      depth: 10,
+    })
+    utilCut.position = blade.mesh.position
+    utilCut.setPivotPoint(new BABYLON.Vector3(-0.04, 0, 0))
+    utilCut.scaling.set(40, 1, 1)
+
+    let meshCSG = BABYLON.CSG2.FromMesh(this._cube)
+    let saberCSG = BABYLON.CSG2.FromMesh(utilCut)
+
+    let lBooleanCSG = meshCSG.subtract(saberCSG)
+    let rBooleanCSG = meshCSG.intersect(saberCSG)
+
+    let lMesh = lBooleanCSG.toMesh('lMesh', this._scene, { centerMesh: false })
+    let rMesh = rBooleanCSG.toMesh('rMesh', this._scene, { centerMesh: false })
+
+    utilCut.dispose()
+
+    return [lMesh, rMesh]
   }
 
   get touchedBlade() {
