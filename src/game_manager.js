@@ -18,13 +18,14 @@ export default class GameManager {
   onGameTick() {
     // checking if alive cubes are touched
     this._aliveCubes = this._aliveCubes.filter((cube) => {
-      if (cube.doesIntersect(this._blade)) {
-        console.log(cube.cut(this._blade))
-        this._removeCubeFromAlive(cube)
-        return false
-      } else {
+      if (!cube.doesIntersect(this._blade)) {
         return true
       }
+
+      cube.cut(this._blade)
+      cube.stopAnimation()
+      cube.delete()
+      return false
     })
   }
 
@@ -43,8 +44,6 @@ export default class GameManager {
 
   _removeCubeFromAlive(cube) {
     const index = this._aliveCubes.indexOf(cube)
-    if (index > -1) {
-      this._aliveCubes.splice(index, 1)
-    }
+    if (index > -1) this._aliveCubes.splice(index, 1)
   }
 }

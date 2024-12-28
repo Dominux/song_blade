@@ -86,7 +86,38 @@ export default class Cube {
 
     utilCut.dispose()
 
-    return [lMesh, rMesh]
+    let objsToDelete = []
+    {
+      const params = [
+        { mesh: lMesh, x: -0.5 },
+        { mesh: rMesh, x: 0.5 },
+      ]
+
+      objsToDelete = [lMesh, rMesh]
+      objsToDelete.push(
+        ...params.map((param) => {
+          const body = new BABYLON.PhysicsBody(
+            param.mesh,
+            BABYLON.PhysicsMotionType.DYNAMIC,
+            false,
+            this._scene
+          )
+
+          body.applyImpulse(
+            new BABYLON.Vector3(param.x, 0, 0.3),
+            BABYLON.Vector3.Zero()
+          )
+
+          return body
+        })
+      )
+    }
+
+    setTimeout(() => {
+      for (const obj of objsToDelete) {
+        obj.dispose()
+      }
+    }, 1000)
   }
 
   get touchedBlade() {

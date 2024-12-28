@@ -27,7 +27,10 @@ const main = async () => {
 const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
 
-  scene.enablePhysics(BABYLON.Vector3.Zero(), new BABYLON.HavokPlugin())
+  scene.enablePhysics(
+    new BABYLON.Vector3(0, -9.8, 0),
+    new BABYLON.HavokPlugin()
+  )
 
   const camera = new BABYLON.FreeCamera(
     'camera1',
