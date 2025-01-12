@@ -5,16 +5,15 @@ export default class ControllersManager {
     this.scene = scene
   }
 
-  assignLeftController(mesh) {
+  /**
+   *
+   * @param {BABYLON.Mesh} mesh
+   * @param {'left' | 'right'} side
+   */
+  assignController(mesh, side) {
     this.left = mesh
 
-    this._createBlade('left', mesh)
-  }
-
-  assignRightController(mesh) {
-    this.right = mesh
-
-    this._createBlade('right', mesh)
+    return this._createBlade(side, mesh)
   }
 
   _createBlade(side, mesh) {
@@ -25,6 +24,6 @@ export default class ControllersManager {
 
     blade.mesh.parent = mesh
 
-    this.blade = blade
+    return blade
   }
 }

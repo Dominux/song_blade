@@ -54,14 +54,15 @@ const createScene = async (engine) => {
   const blade = new Blade(scene, 'asd')
   blade.mesh.position.y += 1
   blade.mesh.position.z -= 7
-  // blade.mesh.rotation = new BABYLON.Vector3(0, 0.3, 0.3)
-  const gameManager = new GameManager(scene, blade)
+  blade.mesh.rotation = new BABYLON.Vector3(0, 0.3, 0.3)
+  const gameManager = new GameManager(scene)
   setInterval(() => gameManager.spawnCube(), 400)
   scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
+  gameManager.addBlade(blade)
 
-  // const controllersManager = new ControllersManager()
+  const controllersManager = new ControllersManager(scene)
 
-  // await addXRSupport(scene, controllersManager)
+  // await addXRSupport(scene, controllersManager, gameManager)
 
   return scene
 }
@@ -70,8 +71,9 @@ const createScene = async (engine) => {
  *
  * @param {BABYLON.Scene} scene
  * @param {ControllersManager} controllersManager
+ * @param {GameManager} gameManager
  */
-const addXRSupport = async (scene, controllersManager) => {
+const addXRSupport = async (scene, controllersManager, gameManager) => {
   const env = scene.createDefaultEnvironment()
 
   // here we add XR support
@@ -87,20 +89,13 @@ const addXRSupport = async (scene, controllersManager) => {
       if (isHand) return
 
       controller.onMotionControllerInitObservable.add((motionController) => {
-        const isLeft = motionController.handedness === 'left'
-
         controller.onMeshLoadedObservable.add((mesh) => {
-          let blade
-          if (isLeft) controllersManager.assignLeftController(mesh)
-          else {
-            blade = controllersManager.assignRightController(mesh)
+          const blade = controllersManager.assignController(
+            mesh,
+            motionController.handedness
+          )
 
-            const gameManager = new GameManager(scene, controllersManager.blade)
-
-            setInterval(() => gameManager.spawnCube(), 400)
-
-            scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
-          }
+          gameManager.addBlade(blade)
         })
       })
     })
