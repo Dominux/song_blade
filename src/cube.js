@@ -72,6 +72,7 @@ export default class Cube {
       depth: 10,
     })
     utilCut.position = blade.mesh.position
+    utilCut.rotation = blade.mesh.rotation
     utilCut.setPivotPoint(new BABYLON.Vector3(-0.04, 0, 0))
     utilCut.scaling.set(40, 1, 1)
 
@@ -84,7 +85,7 @@ export default class Cube {
     let lMesh = lBooleanCSG.toMesh('lMesh', this._scene, { centerMesh: false })
     let rMesh = rBooleanCSG.toMesh('rMesh', this._scene, { centerMesh: false })
 
-    utilCut.dispose()
+    // utilCut.dispose()
 
     let objsToDelete = []
     {

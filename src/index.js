@@ -54,6 +54,7 @@ const createScene = async (engine) => {
   const blade = new Blade(scene, 'asd')
   blade.mesh.position.y += 1
   blade.mesh.position.z -= 7
+  // blade.mesh.rotation = new BABYLON.Vector3(0, 0.3, 0.3)
   const gameManager = new GameManager(scene, blade)
   setInterval(() => gameManager.spawnCube(), 400)
   scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
