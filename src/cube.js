@@ -85,7 +85,7 @@ export default class Cube {
     let lMesh = lBooleanCSG.toMesh('lMesh', this._scene, { centerMesh: false })
     let rMesh = rBooleanCSG.toMesh('rMesh', this._scene, { centerMesh: false })
 
-    // utilCut.dispose()
+    utilCut.dispose()
 
     let objsToDelete = []
     {
