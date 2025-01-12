@@ -1,6 +1,6 @@
 globalThis.HK = await HavokPhysics()
 
-import Blade from './blade.js'
+// import Blade from './blade.js'
 import ControllersManager from './controllers_manager.js'
 import GameManager from './game_manager.js'
 
@@ -51,18 +51,18 @@ const createScene = async (engine) => {
 
   light.intensity = 0.7
 
-  const blade = new Blade(scene, 'asd')
-  blade.mesh.position.y += 1
-  blade.mesh.position.z -= 7
-  blade.mesh.rotation = new BABYLON.Vector3(0, 0.3, 0.3)
+  // const blade = new Blade(scene, 'asd')
+  // blade.mesh.position.y += 1
+  // blade.mesh.position.z -= 7
+  // blade.mesh.rotation = new BABYLON.Vector3(0, 0.3, 0.3)
   const gameManager = new GameManager(scene)
   setInterval(() => gameManager.spawnCube(), 400)
   scene.onBeforeRenderObservable.add(() => gameManager.onGameTick())
-  gameManager.addBlade(blade)
+  // gameManager.addBlade(blade)
 
   const controllersManager = new ControllersManager(scene)
 
-  // await addXRSupport(scene, controllersManager, gameManager)
+  await addXRSupport(scene, controllersManager, gameManager)
 
   return scene
 }
